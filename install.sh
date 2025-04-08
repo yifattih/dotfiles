@@ -3,7 +3,7 @@
 cat bashrc.additions >> ~/.bashrc
 
 cp ./.gitmessage ~
-cat ./.gitconfig >> ~/.gitconfig
+cp ./.gitconfig  ~
 git config --global commit.template ~/.gitmessage
 
 # powerline fonts for zsh agnoster theme
