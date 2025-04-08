@@ -231,4 +231,4 @@ alias ls='eza --color=auto'
 alias md='mkdir -p'
 alias rd=rmdir
 alias which-command=whence
-alias cls=clear
+alias cls='clear'
