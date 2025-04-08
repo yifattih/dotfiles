@@ -1,7 +1,7 @@
 #!/bin/bash
 
+# add additions to bashrc for if bash is used
 cat bashrc.additions >> ~/.bashrc
-source ~/.bashrc
 
 cp ./.gitmessage ~
 cp ./.gitconfig  ~
@@ -34,4 +34,7 @@ rm -f ~/.zshrc
 mv ~/.zshrc.bak ~/.zshrc
 # update theme
 sed -i '/^ZSH_THEME/c\ZSH_THEME="agnoster"' ~/.zshrc
+
+# add additions
+cat bashrc.additions >> ~/.zshrc
 ########################################################################################################################
