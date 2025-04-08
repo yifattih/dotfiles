@@ -115,3 +115,9 @@ alias cls='clear'
 # remove username@hostname in prompt as advised at
 # https://github.com/ohmyzsh/ohmyzsh/issues/5581#issuecomment-256825141
 prompt_context() {}
+
+# Dir: current working directory
+# Show the current working directory in the prompt.
+prompt_dir() {
+    prompt_segment "$AGNOSTER_DIR_BG" "$AGNOSTER_DIR_FG" '%c'
+}
