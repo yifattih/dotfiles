@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cat bashrc.additions >> ~/.bashrc
+source ~/.bashrc
 
 cp ./.gitmessage ~
 cp ./.gitconfig  ~
