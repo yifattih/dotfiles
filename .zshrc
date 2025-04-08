@@ -110,6 +110,7 @@ alias l='eza'
 alias la='eza -a'
 alias ll='eza -lah'
 alias ls='eza --color=auto'
+alias cls='clear'
 
 # remove username@hostname in prompt as advised at
 # https://github.com/ohmyzsh/ohmyzsh/issues/5581#issuecomment-256825141
