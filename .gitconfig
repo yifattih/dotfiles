@@ -1,5 +1,8 @@
 # clearly makes git better
-
+[user]
+    # Please adapt and uncomment the following lines
+    name = yifattih
+    email = yifattih@proton.me
 [column]
     ui = auto
 [branch]
