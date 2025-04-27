@@ -225,11 +225,3 @@ alias gwtls='git worktree list'
 alias gwtmv='git worktree move'
 alias gwtrm='git worktree remove'
 alias history=omz_history
-alias l='eza'
-alias la='eza -a'
-alias ll='eza -lah'
-alias ls='eza --color=auto'
-alias md='mkdir -p'
-alias rd=rmdir
-alias which-command=whence
-alias cls='clear'
