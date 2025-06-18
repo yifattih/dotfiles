@@ -1,0 +1,42 @@
+
+# Title: Summary, imperative, start upper case, don't end with a period 
+# No more than 50 chars. 50 chars is here:       #
+
+ 
+# https://www.conventionalcommits.org/en/v1.0.0/#summary 
+# fix, feat, build. chore, ci, docs, style, refactor, perf, test 
+# Identify breaking changes with a ! : feat! 
+# Scope may be provided in parenthesis: feat(parser) 
+
+
+# Body: Explain *what* and *why* (not *how*). Include task ID (Jira issue). 
+# Wrap at 72 chars.  ################################# which is here:  #
+
+
+# Feature list. use dashes and separate with blank lines 
+
+
+# BREAKING CHANGE: a commit that has a footer BREAKING CHANGE:, or appends 
+# a ! after the type/scope, introduces a breaking API change (correlating 
+# with MAJOR in Semantic versioning). A BREAKING CHANGE can be part of
+# commits of any type. 
+# BREAKING CHANGE: 
+
+
+# Refs: <Jira Tickets>
+
+
+# At the end: Include Co-authored-by for all contributors. 
+# Include at least one empty line before it. Format: 
+# Co-authored-by: name <user@hellofresh.com>
+
+# How to Write a Git Commit Message: 
+# https://cbea.ms/git-commit/
+# 
+# 1. Separate subject from body With a blank line 
+# 2. Limit the subject line to 50 characters 
+# 3. Capitalize the subject line 
+# 4. Do not end the subject line with a period 
+# 5. use the imperative mood in the subject line 
+# 6. Wrap the body at 72 characters 
+# 7. Use the body to explain what and why vs. how
