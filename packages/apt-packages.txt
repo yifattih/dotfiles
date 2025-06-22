@@ -1,0 +1,11 @@
+gnome-terminal:gnome-terminal
+tmux:tmux
+vim:vim
+git:git
+curl:curl
+wget:wget
+eza:eza
+silversearcher-ag:ag
+yq:yq
+batcat:batcat
+stow:stow
