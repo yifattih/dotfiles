@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=gnome-terminal -e "tmux new"
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_US]=Terminal
+Name=GNOME Terminal
+Comment[en_US]=GNOME Terminal
+Comment=GNOME Terminal
