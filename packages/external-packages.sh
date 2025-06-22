@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+log() {
+    if [ "${#}" -eq 1 ]; then
+        local lvl="INFO"
+	local msg="${1}"
+    else
+	local lvl="${1}"
+	local msg="${2}"
+    fi
+    echo "$(date +'%H:%M:%S') [${lvl}] - ${msg}"
+}
+
+die() {
+    if [ "${#}" -eq 1 ]; then
+	local lvl="ERROR"
+	local msg="${1}"
+    else
+	local lvl="${1}"
+	local msg="${2}"
+	local code="${3}"
+    fi
+    log "${lvl}" "${msg}"
+    exit "${code}"
+}
+
+# Starship prompt
+if ! command -v starship > /dev/null 2>&1; then
+    log "Download and install 'starship'"
+    curl -sS https://starship.rs/install.sh | sh
+    log "'startship' installation complete"
+fi
+
+# Install Nerd Hack fonts
+if [ ! -d ~/.fonts ]; then
+    log "Create '.fonts' direcotry"
+    mkdir ~/.fonts
+    log "'.fonts' directory created"
+fi
+
+if [ ! -f ~/.fonts/Hack.zip ]; then
+    log "Downloadng Nerd Hack fonts"
+    wget -O ~/.fonts/Hack.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip > /dev/null 2>&1
+    unzip -o ~/.fonts/Hack.zip -d ~/.fonts > /dev/null 2>&1
+    fc-cache -fv > /dev/null 2>&1
+    log "Fonts setup complete"
+fi
+
+# Docker
+if ! command -v docker > /dev/null 2>&1; then
+    log "Uninstall conflicting packages"
+    for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do
+	sudo apt-get remove "${pkg}" -y > /dev/null 2>&1;
+    done
+
+    log "Deleting all images, containers, and volumes"
+    sudo rm -rf /var/lib/docker
+    sudo rm -rf /var/lib/containerd
+
+    log "Removing source list and keyrings"
+    sudo rm -f /etc/apt/sources.list.d/docker.list
+    sudo rm -f /etc/apt/keyrings/docker.asc
+
+    log "Installing Docker"
+    log "Adding Docker's official GPG key"
+    sudo apt-get install ca-certificates -y > /dev/null 2>&1
+    sudo install -m 0755 -d /etc/apt/keyrings > /dev/null 2>&1
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc > /dev/null 2>&1
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+    log "Adding the repository to Apt sources"
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+
+    log "Installing packages"
+     sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y > /dev/null 2>&1
+fi
+
+# GitHub CLI
+if ! command -v gh > /dev/null 2>&1;then
+    log "Installing GitHub CLI"
+    log "Adding GitHub CLI official GPG key"
+    sudo mkdir -p -m 755 /etc/apt/keyrings
+    out=$(mktemp) && wget -nv -O"${out}" https://cli.github.com/packages/githubcli-archive-keyring.gpg > /dev/null 2>&1
+    cat "${out}" | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg
+    sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
+    
+    log "Adding the repository to Apt sources"
+    sudo mkdir -p -m 755 /etc/apt/sources.list.d
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+    
+    log "Installing package"
+    sudo apt update > /dev/null 2>&1
+    sudo apt install gh -y > /dev/null 2>&1
+fi
