@@ -109,11 +109,21 @@ fi
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+    fi
 fi
 
-eval "$(starship init bash)"
+# Add starsip init cript to the shell
+if command -v starship &>/dev/null; then
+    eval "$(starship init bash)"
+fi
+
+# Launch tmux on all TTY console and terminal emulators
+if command -v tmux > /dev/null 2>&1 && [ -z "${TMUX}" ] && [ "${TERM}" != "dumb" ]; then
+    tmux
+    exit
+fi
+
