@@ -28,6 +28,7 @@ die() {
 
 # Starship prompt
 if ! command -v starship > /dev/null 2>&1; then
+    # Reference: https://starship.rs/
     log "Download and install 'starship'"
     curl -sS https://starship.rs/install.sh | sh
     log "'startship' installation complete"
@@ -50,6 +51,7 @@ fi
 
 # Docker
 if ! command -v docker > /dev/null 2>&1; then
+    # Reference: https://docs.docker.com/engine/install/ubuntu/
     log "Uninstall conflicting packages"
     for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do
 	sudo apt-get remove "${pkg}" -y > /dev/null 2>&1;
@@ -80,6 +82,7 @@ fi
 
 # GitHub CLI
 if ! command -v gh > /dev/null 2>&1;then
+    # Reference: https://github.com/cli/cli/blob/trunk/docs/install_linux.md
     log "Installing GitHub CLI"
     log "Adding GitHub CLI official GPG key"
     sudo mkdir -p -m 755 /etc/apt/keyrings
