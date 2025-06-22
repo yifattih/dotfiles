@@ -2,51 +2,52 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-A portable and reproducible configuration setup by Yifattih for Unix-like systems.
+My personal portable and reproducible configuration setup for debian systems.
 These dotfiles make setting up a new system consistent, efficient, and tailored to my personal workflow and preferences.
 
 ## Contents
 
-* `.bashrc` – Bash configuration (functions, environment variables)
 * `.bash_aliases` –  Aliases
+* `.bashrc` – Bash configuration (functions, environment variables)
+* `.config/` – App-specific configurations (e.g., `warp-terminal/`, etc.)
 * `.gitconfig` – Git global configuration
 * `.gitmessage` – Git info message for commits
-* `.config/` – App-specific configurations (e.g., `warp-terminal/`, etc.)
+* `.stow-local-ignore` - Stow ignore file list
+* `.vimrc` - Vim configuration
+* `install.sh` - Packages and dotfiles installer
+* `packages/apt_pkgs.txt` - List of packages to install using the Advanced Package Tool (APT) formatted as `<installation name>:<binary name>`
+* `packages/other_pkgs.sh` - Script to install packages outside package manager tool
+* `packages/snap_pkgs.txt` - List of packages to install using snap package manager
 
 ## Features
 
 * Minimal and portable
 * Reproducible system setup across machines
 * Designed for Ubuntu and Debian-based distros
-* Easy integration with an **unattended Ubuntu installation** (see [ubuntu-unattended-autoinstall-template](https://github.com/yifattih/ubuntu-unattended-autoinstall-template))
 
 ## Requirements
 
 * `bash`
 * `git`
-* `stow` (for symlink management)
-* `curl`
-* `wget`
 
 ## Installation
 
-1. Clone this repository:
+1. Clone this repository to `${HOME}`:
 
 ```bash
 git clone https://github.com/yifattih/dotfiles ~/dotfiles
 cd ~/dotfiles
 ```
 
-2. Generate symlink farm:
+2. Run the installer:
 
 ```bash
-stow .
+,/install.sh -p -s -f
 ```
+Note: run `./install.sh --help` for more information about the flags
 
 This will:
-
-* Download the dotfiles repository and place it into yout `$HOME` directory
-* Symlink the dotfiles into your `$HOME` directory
+* Download the packages listed and create the symlinks of the dotfiles into your `$HOME` directory
 
 ## Structure
 
@@ -74,10 +75,6 @@ To restore:
 ```bash
 cp ~/dotfiles_backup/.bashrc ~/
 ```
-
-## Related Repositories
-
-* [ubuntu-unattended-autoinstall-template](https://github.com/yifattih/ubuntu-unattended-autoinstall-template) – Automated Ubuntu installation setup.
 
 ## License
 
