@@ -1,0 +1,17 @@
+# Ignore version control system files
+.git
+.gitignore
+.gitmodules
+
+# Ignore project files not meant to be stowed
+README.*
+LICENSE.*
+COPYING
+
+# Ignore package lists and installer scripts
+packages
+install.*
+
+# Ignore editor backup and autosave files
+.*~
+\#.*\#
