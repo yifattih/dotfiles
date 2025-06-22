@@ -10,7 +10,7 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 
-alias _='sudo '
+alias _='sudo'
 
 alias md='mkdir'
 
@@ -26,6 +26,8 @@ alias ls='eza --color=auto'
 
 alias chrome='google-chrome > /dev/null 2>&1 &'
 alias passman='1password > /dev/null 2>&1 &'
+
+alias bat='batcat'
 
 ##############################################################################
 ##############################################################################
