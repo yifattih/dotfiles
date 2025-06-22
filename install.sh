@@ -6,16 +6,17 @@ script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1 && pwd -P)
 
 usage() {
     cat << EOF # remove the space between << and EOF, this is due to web plugin issue
-Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-f] -p param_value arg1 [arg2...]
+Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-f|--file] [-p|--apt-packages] [-s|--snap-packages]
 
 Script description here.
 
 Available options:
 
--h, --help      Print this help and exit
--v, --verbose   Print script debug info
--f, --flag      Some flag description
--p, --param     Some param description
+-h, --help             Print this help and exit
+-v, --verbose          Print script debug info
+-f, --file             Install external packages using script ${script_dir}/packages/external-packages.sh
+-p, --apt-packages     Install packages listed in ${script_dir}/packages/apt-packages.txt using apt package manager
+-s, --snap-packages    Install packages liston in ${script_dir}/packages/snap-packages.txt using snap package manager 
 EOF
     exit
 }
@@ -68,8 +69,8 @@ parse_params() {
             -h | --help) usage ;;
             -v | --verbose) set -x ;;
             --no-color) NO_COLOR=1 ;;
-            -p | --packages) pkgs=1 ;;
-            -s | --snaps) snaps=1 ;;
+            -p | --apt-packages) pkgs=1 ;;
+            -s | --snap-packages) snaps=1 ;;
             -f | --file) file=1 ;;
             -?*) die "Unknown option: ${1}" ;;
             *) break ;;
