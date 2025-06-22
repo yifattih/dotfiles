@@ -46,7 +46,7 @@
 # a matter of taste (uncomment if you dare)
 
 [core]
-    editor = code --wait
+    editor = vim 
     # fsmonitor = true
     # untrackedCache = true
 [merge]
