@@ -187,4 +187,7 @@ for package in $(iterate_array ${packages_to_stow}); do
 	stow -R --no-folding --verbose=2 --target="${HOME}" ${package} 
 done
 
+log "Sourcing .profile file"
+. ~/.profile
+
 die "SUCCESS" "Dotfiles and packages installation complete" 0
