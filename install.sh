@@ -4,19 +4,22 @@ set -Eeuo pipefail
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1 && pwd -P)
 
+packages_to_stow="git:bash:vim"
+
 usage() {
     cat << EOF # remove the space between << and EOF, this is due to web plugin issue
-Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-f|--file] [-p|--apt-packages] [-s|--snap-packages]
+Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-up|--update-upgrade] [-ext|--external-packages-script] [-apt|--apt-packages-list] [-snap|--snap-packages-list]
 
-Script description here.
+Main script to install packages and setup dotfiles.
 
 Available options:
 
--h, --help             Print this help and exit
--v, --verbose          Print script debug info
--f, --file             Install external packages using script ${script_dir}/packages/external-packages.sh
--p, --apt-packages     Install packages listed in ${script_dir}/packages/apt-packages.txt using apt package manager
--s, --snap-packages    Install packages liston in ${script_dir}/packages/snap-packages.txt using snap package manager 
+-h, --help                          Print this help and exit
+-v, --verbose                       Print script debug infor
+-up, --update-upgrade		    Update and upgrade system packages
+-ext, --external-packages-script    Install external packages using script ${script_dir}/packages/external-packages.sh
+-apt, --apt-packages-list           Install packages listed in ${script_dir}/install/apt-packages-list.txt using apt package manager
+-snap, --snap-packages-list         Install packages liston in ${script_dir}/install/snap-packages-list.txt using snap package manager 
 EOF
     exit
 }
@@ -60,51 +63,61 @@ die() {
 }
 
 parse_params() {
-    pkgs=0
-    snaps=0
-    file=0
+	update_upgrade=0
+	install_external_packages=0
+	install_apt_packages=0
+	install_snap_packages=0
 
-    while :; do
-        case "${1-}" in
-            -h | --help) usage ;;
-            -v | --verbose) set -x ;;
-            --no-color) NO_COLOR=1 ;;
-            -p | --apt-packages) pkgs=1 ;;
-            -s | --snap-packages) snaps=1 ;;
-            -f | --file) file=1 ;;
-            -?*) die "Unknown option: ${1}" ;;
-            *) break ;;
-        esac
-        shift
-    done
+	while :; do
+		case "${1-}" in
+			-h | --help) usage ;; 
+			-v | --verbose) set -x ;;
+			--no-color) NO_COLOR=1 ;;
+			-up | --update-upgrade) update_upgrade=1 ;;
+			-ext | --external-packages-script) install_external_packages=1 ;;
+			-snap | --snap-packages-list) install_snap_packages=1 ;;
+			-apt | --apt-packages-list) install_apt_packages=1 ;;
+			-?*) die "Unknown option: ${1}" ;;
+			*) break ;;
+		esac
+		shift
+	done
 
-    log "Starting up..."
+	log "Starting up..."
 
-    if [ ${pkgs} -eq 0 ] && [ ${snaps} -eq 0 ] && [ ${file} -eq 0 ]; then
-        log "WARN" "Script running as 'symlinks' farm manager only"
-	log "WARN" "It will fail if required package is not installed"
-	log "WARN" "Please, see ./install.sh --help for usage information"
-    fi
+	if [ ${install_external_packages} -eq 0 ] && [ ${install_apt_packages} -eq 0 ] && [ ${install_snap_packages} -eq 0 ]; then
+		log "WARN" "Script running as 'symlinks' farm manager only"
+		log "WARN" "It will fail if required package is not installed"
+		log "WARN" "Please, see ./install.sh --help for usage information"
+	fi
 
-    if [ ${pkgs} -eq 1 ] && [ ! -f "${script_dir}"/packages/apt-packages.txt ]; then
-        die "File 'apt-packages' not found in script directory"
-    fi
+	if [ ${install_apt_packages} -eq 1 ] && [ ! -f "${script_dir}"/install/apt-packages-list.txt ]; then
+		die "File ${script_dir}/install/apt-packages-list.txt not found in script directory"
+	fi
 
-    if [ ${snaps} -eq 1 ] && [ ! -f "${script_dir}"/packages/snap-packages.txt ]; then
-        die "File 'snap-pakcages' not found in script directory"
-    fi
+	if [ ${install_snap_packages} -eq 1 ] && [ ! -f "${script_dir}"/install/snap-packages-list.txt ]; then
+		die "File ${script_dir}/install/snap-pakcages-list.txt not found in script directory"
+	fi
 
-    if [ ${file} -eq 1 ] && [ ! -f "${script_dir}"/packages/external-packages.sh ]; then
-        die "File 'external-packages' not found in script directory"
-    fi
+	if [ ${install_external_packages} -eq 1 ] && [ ! -f "${script_dir}"/install/install-external-packages ]; then
+		die "File 'external-packages' not found in script directory"
+	fi
+	
+	log "Parameters parsed successfully"
 
-    log "Parameters parsed successfully"
-
-    return 0
+	return 0
 }
 
 parse_params "${@}"
 setup_colors
+
+iterate_array() {
+        local array="${1}"
+        IFS=':' read -ra array <<< "${array}"
+        for item in "${array[@]}"; do
+                echo "${item}"
+        done
+}
 
 install_apt_packages() {
     log "Installing apt packages"
@@ -115,12 +128,12 @@ install_apt_packages() {
         bin="${bin:-${pkg}}"
         if ! command -v "${bin}" > /dev/null 2>&1; then
             log "Installing package: ${pkg}"
-            sudo apt-get install "${pkg}" -y > /dev/null 2>&1
+            sudo apt-get install "${pkg}" -y
             log "'${pkg}' installed successfully"
         else
             log "Package '${pkg}' is already installed"
         fi
-    done < "${script_dir}/packages/apt-packages.txt"
+    done < "${script_dir}/install/apt-packages-list.txt"
     log "SUCCESS" "Apt packages installation complete"
 }
 
@@ -131,19 +144,19 @@ install_snap_packages() {
         [[ -z "${snap}" || "${snap}" == \#* ]] && continue
         if ! snap list | grep -q "^${snap}\s" > /dev/null 2>&1; then
             log "Installing package: ${snap}"
-            sudo snap install "${snap}" --classic > /dev/null 2>&1
+            sudo snap install "${snap}" --classic
             log "'${snap}' installed successfully"
         else
             log "Package '${snap}' is already installed"
         fi
-    done < "${script_dir}/packages/snap-packages.txt"
+    done < "${script_dir}/install/snap-packages-list.txt"
     log "SUCCESS" "Snap packages installation complete"
 }
 
 install_external_packages() {
-    log "Installing other packages from file"
-    bash "${script_dir}/packages/external-packages.sh"
-    log "SUCCESS" "Other packages installation complete"
+    log "Installing external packages using script"
+    bash "${script_dir}/install/install-external-packages"
+    log "SUCCESS" "External packages installation complete"
 }
 
 gnome_terminal_fullscreen_shortcut() {
@@ -155,23 +168,23 @@ gnome_terminal_fullscreen_shortcut() {
 	log "GNOME Terminal shortcut overwritten"
 }
 
-log "Updating system..."
-sudo apt-get update > /dev/null 2>&1
-log "Update completed"
+if [ ${update_upgrade} -eq 1 ]; then
+	log "Updating system..."
+	sudo apt-get update
+	log "Update completed"
 
-log "Upgrading system"
-sudo apt-get upgrade -y > /dev/null 2>&1
-log "System upgrade completed"
-
-if [ ${pkgs} -eq 1 ]; then install_apt_packages; fi
-if [ ${snaps} -eq 1 ]; then install_snap_packages; fi
-if [ ${file} -eq 1 ]; then install_external_packages; fi
-
-if command -v gnome-terminal; then
-    gnome_terminal_fullscreen_shortcut
+	log "Upgrading system"
+	sudo apt-get upgrade -y
+	log "System upgrade completed"
 fi
 
-log "Setting up dotfiles using stow..."
-stow -R --no-folding --verbose=2 --target="${HOME}" .
+if [ ${install_apt_packages} -eq 1 ]; then install_apt_packages; fi
+if [ ${install_snap_packages} -eq 1 ]; then install_snap_packages; fi
+if [ ${install_external_packages} -eq 1 ]; then install_external_packages; fi
+
+log "Setting up symlinks with stow..."
+for package in $(iterate_array ${packages_to_stow}); do
+	stow -R --no-folding --verbose=2 --target="${HOME}" ${package} 
+done
 
 die "SUCCESS" "Dotfiles and packages installation complete" 0
