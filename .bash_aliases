@@ -12,7 +12,7 @@ alias ......='cd ../../../../..'
 
 alias _='sudo'
 
-alias md='mkdir'
+alias md='mkdir -p'
 
 alias rf='rm'
 alias rd='rm -r'
