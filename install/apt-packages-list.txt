@@ -7,5 +7,5 @@ wget:wget
 eza:eza
 silversearcher-ag:ag
 yq:yq
-batcat:batcat
+bat:batcat
 stow:stow
