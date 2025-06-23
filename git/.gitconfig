@@ -1,3 +1,4 @@
+# Reference: https://blog.gitbutler.com/how-git-core-devs-configure-git/
 # clearly makes git better
 [user]
 	# Please adapt and uncomment the following lines
@@ -53,3 +54,7 @@
 	# conflictstyle = zdiff3 
 [pull]
 	# rebase = true
+
+# my additions
+[url "ssh://git@github.com/"]
+    insteadOf = https://github.com/
