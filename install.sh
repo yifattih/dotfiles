@@ -146,6 +146,15 @@ install_external_packages() {
     log "SUCCESS" "Other packages installation complete"
 }
 
+gnome_terminal_fullscreen_shortcut() {
+        log "WARN" "Overwriting system's defualt Gnome Terminal shortcut to launch in full screen..."
+	gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "[ '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/' ]"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name 'Terminal Fullscreen'
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command 'gnome-terminal --full-screen'
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding '<Control><Alt>t'
+	log "GNOME Terminal shortcut overwritten"
+}
+
 log "Updating system..."
 sudo apt-get update > /dev/null 2>&1
 log "Update completed"
@@ -157,6 +166,10 @@ log "System upgrade completed"
 if [ ${pkgs} -eq 1 ]; then install_apt_packages; fi
 if [ ${snaps} -eq 1 ]; then install_snap_packages; fi
 if [ ${file} -eq 1 ]; then install_external_packages; fi
+
+if command -v gnome-terminal; then
+    gnome_terminal_fullscreen_shortcut
+fi
 
 log "Setting up dotfiles using stow..."
 stow -R --no-folding --verbose=2 --target="${HOME}" .
