@@ -30,9 +30,58 @@ alias passman='1password > /dev/null 2>&1 &'
 alias bat='batcat'
 
 alias ghl='gh auth login -p ssh -h github.com'
+
 ##############################################################################
 ##############################################################################
 ##############################################################################
+################################### tmux
+if [ -n "$TMUX" ]; then
+	# sessions
+	alias txn='tmux new-session -A -s dev'       # Start or attach to 'dev' session
+	alias txns='tmux list-sessions'              # List sessions
+	alias txkill='tmux kill-session -t dev'      # Kill 'dev' session
+
+	# windows
+	alias txnw='tmux new-window'                 # New window
+	alias txw='tmux list-windows'                # List windows
+	alias txrn='tmux rename-window'              # Rename current window
+	alias txsw='tmux select-window -t'           # Select window (requires arg)
+	alias txmw='tmux move-window -t'             # Move window (requires arg)
+	alias txkw='tmux kill-window'                # Kill current window
+
+	# panes
+	alias txh='tmux split-window -h'             # Horizontal split
+	alias txv='tmux split-window -v'             # Vertical split
+	alias txr='tmux select-pane -R'              # Move to right pane
+	alias txl='tmux select-pane -L'              # Move to left pane
+	alias txbot='tmux select-pane -D'            # Move to bottom pane
+	alias txtop='tmux select-pane -U'            # Move to top pane
+	alias txsp='tmux swap-pane -D'               # Swap pane down
+	alias txmp='tmux move-pane -t'               # Move pane (requires arg)
+	alias txkp='tmux kill-pane'                  # Kill current pane
+
+	# layouts
+	alias txlay='tmux list-windows \; list-panes'    # Overview layout
+	alias txeq='tmux select-layout even-horizontal'  # Equal horizontal
+	alias txev='tmux select-layout even-vertical'    # Equal vertical
+	alias txtiled='tmux select-layout tiled'         # Tiled layout
+	alias txzoom='tmux resize-pane -Z'               # Toggle zoom
+
+	# utilities
+	alias txc='tmux clear-history'                # Clear scrollback
+	alias txtime='tmux display-message "%T"'      # Show current time
+	alias txmsg='tmux display-message'            # Print message
+	alias txcfg='tmux source-file ~/.tmux.conf'   # Reload config
+
+	# exit helpers
+	alias txe='exit'                              # Exit shell
+	alias txx='tmux kill-server'                  # Kill all tmux
+fi
+
+##############################################################################
+##############################################################################
+##############################################################################
+################################### git 
 
 # Functions added from git.zsh (https://github.com/ohmyzsh/ohmyzsh/blob/8cbe98469d9862d37d43ca4229dc8e915ec377a9/lib/git.zsh)
 # The git prompt's git commands are read-only and should not interfere with
@@ -60,9 +109,6 @@ function git_current_branch() {
   fi
   echo ${ref#refs/heads/}
 }
-##############################################################################
-##############################################################################
-##############################################################################
 
 # From  official oh-my-zsh repository: https://github.com/ohmyzsh
 # File URL: https://github.com/ohmyzsh/ohmyzsh/blob/8cbe98469d9862d37d43ca4229dc8e915ec377a9/plugins/git/git.plugin.zsh
