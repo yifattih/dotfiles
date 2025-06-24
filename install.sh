@@ -188,6 +188,6 @@ for package in $(iterate_array ${packages_to_stow}); do
 done
 
 log "Sourcing .profile file"
-. ~/.profile
+. ${HOME}/.profile
 
 die "SUCCESS" "Dotfiles and packages installation complete" 0
