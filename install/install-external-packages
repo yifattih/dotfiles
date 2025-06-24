@@ -28,10 +28,10 @@ die() {
 
 # Starship prompt
 if ! command -v starship > /dev/null 2>&1; then
-    # Reference: https://starship.rs/
-    log "Download and install 'starship'"
-    curl -sS https://starship.rs/install.sh | sh
-    log "'startship' installation complete"
+	# Reference: https://starship.rs/
+	log "Download and install 'starship'"
+	curl -fsSL https://starship.rs/install.sh | sh -s -- -y
+	log "'startship' installation complete"
 fi
 
 # Install Nerd Hack fonts
@@ -43,9 +43,9 @@ fi
 
 if [ ! -f ~/.fonts/Hack.zip ]; then
     log "Downloadng Nerd Hack fonts"
-    wget -O ~/.fonts/Hack.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip > /dev/null 2>&1
-    unzip -o ~/.fonts/Hack.zip -d ~/.fonts > /dev/null 2>&1
-    fc-cache -fv > /dev/null 2>&1
+    wget -O ${HOME}/.fonts/Hack.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
+    unzip -o ${HOME}/.fonts/Hack.zip -d ~/.fonts
+    fc-cache -fv
     log "Fonts setup complete"
 fi
 
@@ -77,7 +77,7 @@ if ! command -v docker > /dev/null 2>&1; then
     sudo apt-get update
 
     log "Installing packages"
-     sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y > /dev/null 2>&1
+     sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y 
 fi
 
 # GitHub CLI
