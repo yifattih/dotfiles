@@ -168,6 +168,17 @@ gnome_terminal_fullscreen_shortcut() {
 	log "GNOME Terminal shortcut overwritten"
 }
 
+gnome_terminal_capslock_ctrl_mapping() {
+	log "Mapping CapsLock key to Ctrl..."
+	gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
+	log "Key mapped"
+}
+
+if command -v gnome-terminal; then
+	gnome_terminal_fullscreen_shortcut
+	gnome_terminal_capslock_ctrl_mapping
+fi
+
 if [ ${update_upgrade} -eq 1 ]; then
 	log "Updating system..."
 	sudo apt-get update
