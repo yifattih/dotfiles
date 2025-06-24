@@ -9,3 +9,5 @@ silversearcher-ag:ag
 yq:yq
 bat:batcat
 stow:stow
+zip:zip
+unzip:unzip
