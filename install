@@ -4,7 +4,7 @@ set -Eeuo pipefail
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1 && pwd -P)
 
-packages_to_stow="git:bash:vim"
+packages_to_stow="shell:git:vim"
 
 usage() {
     cat << EOF # remove the space between << and EOF, this is due to web plugin issue
