@@ -10,16 +10,16 @@ usage() {
     cat << EOF # remove the space between << and EOF, this is due to web plugin issue
 Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-up|--update-upgrade] [-ext|--external-packages-script] [-apt|--apt-packages-list] [-snap|--snap-packages-list]
 
-Main script to install packages and setup dotfiles.
+Dotfiles installer script.
 
 Available options:
 
 -h, --help                          Print this help and exit
 -v, --verbose                       Print script debug infor
 -up, --update-upgrade		    Update and upgrade system packages
--ext, --external-packages-script    Install external packages using script ${script_dir}/packages/external-packages.sh
--apt, --apt-packages-list           Install packages listed in ${script_dir}/install/apt-packages-list.txt using apt package manager
--snap, --snap-packages-list         Install packages liston in ${script_dir}/install/snap-packages-list.txt using snap package manager 
+-ext, --external-packages-script    Install external packages using script ${script_dir}/installer/install-external-packages
+-apt, --apt-packages-list           Install packages listed in ${script_dir}/installer/apt-packages-list.txt using apt package manager
+-snap, --snap-packages-list         Install packages liston in ${script_dir}/installer/snap-packages-list.txt using snap package manager 
 EOF
     exit
 }
@@ -88,18 +88,18 @@ parse_params() {
 	if [ ${install_external_packages} -eq 0 ] && [ ${install_apt_packages} -eq 0 ] && [ ${install_snap_packages} -eq 0 ]; then
 		log "WARN" "Script running as 'symlinks' farm manager only"
 		log "WARN" "It will fail if required package is not installed"
-		log "WARN" "Please, see ./install.sh --help for usage information"
+		log "WARN" "Please, see ./install --help for usage information"
 	fi
 
-	if [ ${install_apt_packages} -eq 1 ] && [ ! -f "${script_dir}"/install/apt-packages-list.txt ]; then
-		die "File ${script_dir}/install/apt-packages-list.txt not found in script directory"
+	if [ ${install_apt_packages} -eq 1 ] && [ ! -f "${script_dir}"/installer/apt-packages-list.txt ]; then
+		die "File ${script_dir}/installer/apt-packages-list.txt not found in script directory"
 	fi
 
-	if [ ${install_snap_packages} -eq 1 ] && [ ! -f "${script_dir}"/install/snap-packages-list.txt ]; then
-		die "File ${script_dir}/install/snap-pakcages-list.txt not found in script directory"
+	if [ ${install_snap_packages} -eq 1 ] && [ ! -f "${script_dir}"/installer/snap-packages-list.txt ]; then
+		die "File ${script_dir}/installer/snap-pakcages-list.txt not found in script directory"
 	fi
 
-	if [ ${install_external_packages} -eq 1 ] && [ ! -f "${script_dir}"/install/install-external-packages ]; then
+	if [ ${install_external_packages} -eq 1 ] && [ ! -f "${script_dir}"/installer/install-external-packages ]; then
 		die "File 'external-packages' not found in script directory"
 	fi
 	
@@ -133,7 +133,7 @@ install_apt_packages() {
         else
             log "Package '${pkg}' is already installed"
         fi
-    done < "${script_dir}/install/apt-packages-list.txt"
+    done < "${script_dir}/installer/apt-packages-list.txt"
     log "SUCCESS" "Apt packages installation complete"
 }
 
@@ -149,13 +149,13 @@ install_snap_packages() {
         else
             log "Package '${snap}' is already installed"
         fi
-    done < "${script_dir}/install/snap-packages-list.txt"
+    done < "${script_dir}/installer/snap-packages-list.txt"
     log "SUCCESS" "Snap packages installation complete"
 }
 
 install_external_packages() {
     log "Installing external packages using script"
-    bash "${script_dir}/install/install-external-packages"
+    bash "${script_dir}/installer/install-external-packages"
     log "SUCCESS" "External packages installation complete"
 }
 
@@ -171,7 +171,26 @@ gnome_terminal_fullscreen_shortcut() {
 gnome_terminal_capslock_ctrl_mapping() {
 	log "Mapping CapsLock key to Ctrl..."
 	gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
-	log "Key mapped"
+	log "Key mapping complete"
+}
+
+gnome_system_theme_switch_cron() {
+	log "Adding cron jobs to change system theme on selected times"
+	crontab_entry_light='0 7 * * * gnome-theme-switcher light >> ${HOME}/.cron_theme.log 2>&1'
+	crontab_entry_dark='0 19 * * * gnome-theme-switcher dark >> ${HOME}/.cron_theme.log 2>&1'
+
+	local current_crontab=$(crontab -l 2>/dev/null || true)
+
+	if ! grep -q "gnome-theme-switcher light" <<< "${current_crontab}"; then
+		(echo "${current_crontab}"; echo "${crontab_entry_light}") | crontab -
+		log "Added 7AM light mode cron job"
+	fi
+
+	if ! grep -q "gnome-theme-switcher dark" <<< "${current_crontab}"; then
+		(crontab -l 2>/dev/null; echo "${crontab_entry_dark}") | crontab -
+		log "Added 7PM dark mode cron job"
+	fi
+	log "Jobs added to crontab"
 }
 
 if command -v gnome-terminal; then
@@ -198,7 +217,9 @@ for package in $(iterate_array ${packages_to_stow}); do
 	stow -R --no-folding --verbose=2 --target="${HOME}" ${package} 
 done
 
-log "Sourcing .profile file"
+log "Sourcing .profile file to activate environment"
 . ${HOME}/.profile
+
+gnome_system_theme_switch_cron
 
 die "SUCCESS" "Dotfiles and packages installation complete" 0
