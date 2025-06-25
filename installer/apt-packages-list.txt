@@ -12,3 +12,4 @@ stow:stow
 zip:zip
 unzip:unzip
 cron:cron
+shellcheck:shellcheck
