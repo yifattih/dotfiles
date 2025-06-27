@@ -1,6 +1,5 @@
 gnome-terminal:gnome-terminal
 tmux:tmux
-vim:vim
 git:git
 curl:curl
 wget:wget
@@ -13,3 +12,4 @@ zip:zip
 unzip:unzip
 cron:cron
 shellcheck:shellcheck
+shfmt:shfmt
