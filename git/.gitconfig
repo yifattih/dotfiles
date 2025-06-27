@@ -46,7 +46,7 @@
 
 # a matter of taste (uncomment if you dare)
 [core]
-	editor = vim 
+	editor = nvim 
 	# fsmonitor = true
 	# untrackedCache = true
 [merge]
@@ -56,5 +56,5 @@
 	# rebase = true
 
 # my additions
-[url "ssh://git@github.com/"]
-    insteadOf = https://github.com/
+#[url "ssh://git@github.com/"]
+#    insteadOf = https://github.com/
