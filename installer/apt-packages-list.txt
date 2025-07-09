@@ -13,3 +13,4 @@ unzip:unzip
 cron:cron
 shellcheck:shellcheck
 shfmt:shfmt
+ripgrep:ripgrep
