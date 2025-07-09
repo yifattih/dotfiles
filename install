@@ -235,4 +235,6 @@ if [ ! -d "${HOME}"/.tmux/plugins/tpm ]; then install_tmux_plugin_manager; fi
 
 gnome_system_theme_switch_cron
 
-die "SUCCESS" "Dotfiles and packages installation complete" 0
+log "SUCCESS" "Dotfiles and packages installation complete"
+
+exec "${SHELL}"
