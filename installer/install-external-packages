@@ -3,117 +3,117 @@
 set -Eeuo pipefail
 
 log() {
-	if [ "${#}" -eq 1 ]; then
-		local lvl="INFO"
-		local msg="${1}"
-	else
-		local lvl="${1}"
-		local msg="${2}"
-	fi
-	echo "$(date +'%H:%M:%S') [${lvl}] - ${msg}"
+  if [ "${#}" -eq 1 ]; then
+    local lvl="INFO"
+    local msg="${1}"
+  else
+    local lvl="${1}"
+    local msg="${2}"
+  fi
+  echo "$(date +'%H:%M:%S') [${lvl}] - ${msg}"
 }
 
 die() {
-	if [ "${#}" -eq 1 ]; then
-		local lvl="ERROR"
-		local msg="${1}"
-	else
-		local lvl="${1}"
-		local msg="${2}"
-		local code="${3}"
-	fi
-	log "${lvl}" "${msg}"
-	exit "${code}"
+  if [ "${#}" -eq 1 ]; then
+    local lvl="ERROR"
+    local msg="${1}"
+  else
+    local lvl="${1}"
+    local msg="${2}"
+    local code="${3}"
+  fi
+  log "${lvl}" "${msg}"
+  exit "${code}"
 }
 
 # Neovim
 if ! command -v nvim >/dev/null 2>&1; then
-	# Reference: https://github.com/neovim/neovim/blob/master/INSTALL.md
-	curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
-	sudo rm -rf "${HOME}"/bin/nvim
-	sudo tar -C "${HOME}"/bin/ -xzf nvim-linux-x86_64.tar.gz
-	sudo chown -R "${USER}":"${USER}" "$HOME"/bin/nvim-linux-x86_64
-	ln -s "${HOME}"/bin/nvim-linux-x86_64/bin/nvim "${HOME}"/bin/nvim
-	rm nvim-linux-x86_64.tar.gz
+  # Reference: https://github.com/neovim/neovim/blob/master/INSTALL.md
+  curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+  sudo rm -rf "${HOME}"/bin/nvim
+  sudo tar -C "${HOME}"/bin/ -xzf nvim-linux-x86_64.tar.gz
+  sudo chown -R "${USER}":"${USER}" "$HOME"/bin/nvim-linux-x86_64
+  ln -s "${HOME}"/bin/nvim-linux-x86_64/bin/nvim "${HOME}"/bin/nvim
+  rm nvim-linux-x86_64.tar.gz
 fi
 
 # Starship prompt
 if ! command -v starship >/dev/null 2>&1; then
-	# Reference: https://starship.rs/
-	log "Download and install 'starship'"
-	(
-		mkdir tmp &&
-			cd tmp &&
-			curl -sS https://starship.rs/install.sh -o install.sh &&
-			chmod 755 install.sh &&
-			./install.sh -b "${HOME}"/bin -y &&
-			cd .. &&
-			rm -r tmp
-	)
-	log "'startship' installation complete"
+  # Reference: https://starship.rs/
+  log "Download and install 'starship'"
+  (
+    mkdir tmp &&
+      cd tmp &&
+      curl -sS https://starship.rs/install.sh -o install.sh &&
+      chmod 755 install.sh &&
+      ./install.sh -b "${HOME}"/bin -y &&
+      cd .. &&
+      rm -r tmp
+  )
+  log "'startship' installation complete"
 fi
 
 # Install Nerd Hack fonts
 if [ ! -d ~/.fonts ]; then
-	log "Create '.fonts' direcotry"
-	mkdir ~/.fonts
-	log "'.fonts' directory created"
+  log "Create '.fonts' direcotry"
+  mkdir ~/.fonts
+  log "'.fonts' directory created"
 fi
 
 if [ ! -f ~/.fonts/Hack.zip ]; then
-	log "Downloadng Nerd Hack fonts"
-	wget -O "${HOME}"/.fonts/Hack.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
-	unzip -o "${HOME}"/.fonts/Hack.zip -d ~/.fonts
-	fc-cache -fv
-	log "Fonts setup complete"
+  log "Downloadng Nerd Hack fonts"
+  wget -O "${HOME}"/.fonts/Hack.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
+  unzip -o "${HOME}"/.fonts/Hack.zip -d ~/.fonts
+  fc-cache -fv
+  log "Fonts setup complete"
 fi
 
 # Docker
 if ! command -v docker >/dev/null 2>&1; then
-	# Reference: https://docs.docker.com/engine/install/ubuntu/
-	log "Uninstall conflicting packages"
-	for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do
-		sudo apt-get remove "${pkg}" -y >/dev/null 2>&1
-	done
+  # Reference: https://docs.docker.com/engine/install/ubuntu/
+  log "Uninstall conflicting packages"
+  for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do
+    sudo apt-get remove "${pkg}" -y >/dev/null 2>&1
+  done
 
-	log "Deleting all images, containers, and volumes"
-	sudo rm -rf /var/lib/docker
-	sudo rm -rf /var/lib/containerd
+  log "Deleting all images, containers, and volumes"
+  sudo rm -rf /var/lib/docker
+  sudo rm -rf /var/lib/containerd
 
-	log "Removing source list and keyrings"
-	sudo rm -f /etc/apt/sources.list.d/docker.list
-	sudo rm -f /etc/apt/keyrings/docker.asc
+  log "Removing source list and keyrings"
+  sudo rm -f /etc/apt/sources.list.d/docker.list
+  sudo rm -f /etc/apt/keyrings/docker.asc
 
-	log "Installing Docker"
-	log "Adding Docker's official GPG key"
-	sudo apt-get install ca-certificates -y >/dev/null 2>&1
-	sudo install -m 0755 -d /etc/apt/keyrings >/dev/null 2>&1
-	sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc >/dev/null 2>&1
-	sudo chmod a+r /etc/apt/keyrings/docker.asc
+  log "Installing Docker"
+  log "Adding Docker's official GPG key"
+  sudo apt-get install ca-certificates -y >/dev/null 2>&1
+  sudo install -m 0755 -d /etc/apt/keyrings >/dev/null 2>&1
+  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc >/dev/null 2>&1
+  sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-	log "Adding the repository to Apt sources"
-	echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
-	sudo apt-get update
+  log "Adding the repository to Apt sources"
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+  sudo apt-get update
 
-	log "Installing packages"
-	sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+  log "Installing packages"
+  sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 fi
 
 # GitHub CLI
 if ! command -v gh >/dev/null 2>&1; then
-	# Reference: https://github.com/cli/cli/blob/trunk/docs/install_linux.md
-	log "Installing GitHub CLI"
-	log "Adding GitHub CLI official GPG key"
-	sudo mkdir -p -m 755 /etc/apt/keyrings
-	out=$(mktemp) && wget -nv -O"${out}" https://cli.github.com/packages/githubcli-archive-keyring.gpg >/dev/null 2>&1
-	cat "${out}" | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg
-	sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
+  # Reference: https://github.com/cli/cli/blob/trunk/docs/install_linux.md
+  log "Installing GitHub CLI"
+  log "Adding GitHub CLI official GPG key"
+  sudo mkdir -p -m 755 /etc/apt/keyrings
+  out=$(mktemp) && wget -nv -O"${out}" https://cli.github.com/packages/githubcli-archive-keyring.gpg >/dev/null 2>&1
+  cat "${out}" | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg
+  sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
 
-	log "Adding the repository to Apt sources"
-	sudo mkdir -p -m 755 /etc/apt/sources.list.d
-	echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null
+  log "Adding the repository to Apt sources"
+  sudo mkdir -p -m 755 /etc/apt/sources.list.d
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null
 
-	log "Installing package"
-	sudo apt update >/dev/null 2>&1
-	sudo apt install gh -y >/dev/null 2>&1
+  log "Installing package"
+  sudo apt update >/dev/null 2>&1
+  sudo apt install gh -y >/dev/null 2>&1
 fi
