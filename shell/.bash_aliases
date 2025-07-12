@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Temporary
+alias tasks="nvim ${HOME}/Documents/tasks.md"
+
 alias cls='clear'
 
 alias -- -='cd -'
@@ -37,54 +40,55 @@ alias v='nvim'
 ##############################################################################
 ################################### tmux
 if [ -n "$TMUX" ]; then
-	# sessions
-	alias txn='tmux new-session -A -s dev'       # Start or attach to 'dev' session
-	alias txns='tmux list-sessions'              # List sessions
-	alias txkill='tmux kill-session -t dev'      # Kill 'dev' session
+  # sessions
+  alias txn='tmux new-session -A -s dev'  # Start or attach to 'dev' session
+  alias txns='tmux list-sessions'         # List sessions
+  alias txkill='tmux kill-session -t dev' # Kill 'dev' session
 
-	# windows
-	alias txnw='tmux new-window'                 # New window
-	alias txw='tmux list-windows'                # List windows
-	alias txrn='tmux rename-window'              # Rename current window
-	alias txsw='tmux select-window -t'           # Select window (requires arg)
-	alias txmw='tmux move-window -t'             # Move window (requires arg)
-	alias txkw='tmux kill-window'                # Kill current window
+  # windows
+  alias txnw='tmux new-window'       # New window
+  alias txw='tmux list-windows'      # List windows
+  alias txrn='tmux rename-window'    # Rename current window
+  alias txsw='tmux select-window -t' # Select window (requires arg)
+  alias txmw='tmux move-window -t'   # Move window (requires arg)
+  alias txkw='tmux kill-window'      # Kill current window
 
-	# panes
-	alias txh='tmux split-window -h'             # Horizontal split
-	alias txv='tmux split-window -v'             # Vertical split
-	alias txr='tmux select-pane -R'              # Move to right pane
-	alias txl='tmux select-pane -L'              # Move to left pane
-	alias txbot='tmux select-pane -D'            # Move to bottom pane
-	alias txtop='tmux select-pane -U'            # Move to top pane
-	alias txsp='tmux swap-pane -D'               # Swap pane down
-	alias txmp='tmux move-pane -t'               # Move pane (requires arg)
-	alias txkp='tmux kill-pane'                  # Kill current pane
+  # panes
+  alias txh='tmux split-window -h'  # Horizontal split
+  alias txv='tmux split-window -v'  # Vertical split
+  alias txr='tmux select-pane -R'   # Move to right pane
+  alias txl='tmux select-pane -L'   # Move to left pane
+  alias txbot='tmux select-pane -D' # Move to bottom pane
+  alias txtop='tmux select-pane -U' # Move to top pane
+  alias txsp='tmux swap-pane -D'    # Swap pane down
+  alias txmp='tmux move-pane -t'    # Move pane (requires arg)
+  alias txkp='tmux kill-pane'       # Kill current pane
 
-	# layouts
-	alias txlay='tmux list-windows \; list-panes'    # Overview layout
-	alias txeq='tmux select-layout even-horizontal'  # Equal horizontal
-	alias txev='tmux select-layout even-vertical'    # Equal vertical
-	alias txtiled='tmux select-layout tiled'         # Tiled layout
-	alias txzoom='tmux resize-pane -Z'               # Toggle zoom
+  # layouts
+  alias txlay='tmux list-windows \; list-panes'   # Overview layout
+  alias txeq='tmux select-layout even-horizontal' # Equal horizontal
+  alias txev='tmux select-layout even-vertical'   # Equal vertical
+  alias txtiled='tmux select-layout tiled'        # Tiled layout
+  alias txzoom='tmux resize-pane -Z'              # Toggle zoom
 
-	# utilities
-	alias txc='tmux clear-history'                # Clear scrollback
-	alias txtime='tmux display-message "%T"'      # Show current time
-	alias txmsg='tmux display-message'            # Print message
-	alias txcfg='tmux source-file ~/.tmux.conf'   # Reload config
+  # utilities
+  alias txc='tmux clear-history'              # Clear scrollback
+  alias txtime='tmux display-message "%T"'    # Show current time
+  alias txmsg='tmux display-message'          # Print message
+  alias txcfg='tmux source-file ~/.tmux.conf' # Reload config
 
-	# exit helpers
-	alias txe='exit'                              # Exit shell
-	alias txx='tmux kill-server'                  # Kill all tmux
+  # exit helpers
+  alias txe='exit'             # Exit shell
+  alias txx='tmux kill-server' # Kill all tmux
 fi
 
 ##############################################################################
 ##############################################################################
 ##############################################################################
-################################### git 
+################################### git
 
-# Functions added from git.zsh (https://github.com/ohmyzsh/ohmyzsh/blob/8cbe98469d9862d37d43ca4229dc8e915ec377a9/lib/git.zsh)
+# Functions added from git.zsh
+# (https://github.com/ohmyzsh/ohmyzsh/blob/8cbe98469d9862d37d43ca4229dc8e915ec377a9/lib/git.zsh)
 # The git prompt's git commands are read-only and should not interfere with
 # other processes. This environment variable is equivalent to running with `git
 # --no-optional-locks`, but falls back gracefully for older versions of git.
@@ -102,11 +106,11 @@ function __git_prompt_git() {
 # it's not a symbolic ref, but in a Git repo.
 function git_current_branch() {
   local ref
-  ref=$(__git_prompt_git symbolic-ref --quiet HEAD 2> /dev/null)
+  ref=$(__git_prompt_git symbolic-ref --quiet HEAD 2>/dev/null)
   local ret=$?
   if [[ $ret != 0 ]]; then
-    [[ $ret == 128 ]] && return  # no git repo.
-    ref=$(__git_prompt_git rev-parse --short HEAD 2> /dev/null) || return
+    [[ $ret == 128 ]] && return # no git repo.
+    ref=$(__git_prompt_git rev-parse --short HEAD 2>/dev/null) || return
   fi
   echo ${ref#refs/heads/}
 }
@@ -474,3 +478,9 @@ function grename() {
 ##############################################################################
 ##############################################################################
 ##############################################################################
+# Added by Zettelkasten setup script
+alias zzettel='/home/yifattih/Documents/zettelkasten/scripts/new_zettel'
+alias zlit='/home/yifattih/Documents/zettelkasten/scripts/new_lit'
+alias zbib='/home/yifattih/Documents/zettelkasten/scripts/new_bib'
+alias zindex='/home/yifattih/Documents/zettelkasten/scripts/new_index'
+alias zbackup='/home/yifattih/Documents/zettelkasten/scripts/backup'
