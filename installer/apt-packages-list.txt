@@ -1,4 +1,4 @@
-gnome-terminal:gnome-terminal
+npm:npm
 tmux:tmux
 git:git
 curl:curl
@@ -6,11 +6,10 @@ wget:wget
 eza:eza
 silversearcher-ag:ag
 yq:yq
+jq:jq
 bat:batcat
 stow:stow
 zip:zip
 unzip:unzip
 cron:cron
-shellcheck:shellcheck
-shfmt:shfmt
-ripgrep:ripgrep
+ripgrep:rg
