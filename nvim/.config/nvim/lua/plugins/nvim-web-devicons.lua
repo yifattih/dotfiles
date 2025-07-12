@@ -1,3 +1,9 @@
+-- Author: Yifattih
+-- ===========================================================================
+-- NVIM WEB DEVICONS
+-- ===========================================================================
+
 return {
-  { "nvim-tree/nvim-web-devicons" }
+    "nvim-tree/nvim-web-devicons",
+    lazy = false
 }
