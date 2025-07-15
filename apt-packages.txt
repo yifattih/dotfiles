@@ -1,0 +1,15 @@
+npm
+tmux
+git
+curl
+wget
+eza
+silversearcher-ag
+yq
+jq
+bat
+stow
+zip
+unzip
+cron
+ripgrep
