@@ -94,13 +94,13 @@ vim.opt.tabline = ''    -- Use default tabline (empty string uses built-in)
 vim.opt.wildmenu = true
 vim.opt.wildmode = "longest:full,full"
 vim.opt.wildignore:append(
-    {
-        "*.o",
-        "*.obj",
-        "*.pyc",
-        "*.class",
-        "*.jar"
-    }
+  {
+    "*.o",
+    "*.obj",
+    "*.pyc",
+    "*.class",
+    "*.jar"
+  }
 )
 
 -- Better diff options
@@ -109,3 +109,7 @@ vim.opt.diffopt:append("linematch:60")
 -- Performance improvements
 vim.opt.redrawtime = 10000
 vim.opt.maxmempattern = 20000
+
+-- Spelling
+vim.opt.spell = true
+vim.opt.spelllang = { "en" }
