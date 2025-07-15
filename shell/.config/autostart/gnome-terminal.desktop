@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=gnome-terminal --full-screen -e "tmux new"
+Exec=gnome-terminal "tmux new"
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
