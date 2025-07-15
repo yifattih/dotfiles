@@ -1,6 +1,4 @@
 -- Author: Yifattih
--- A good portion of this configuration comes from:
--- https://github.com/radleylewis/nvim-lite/blob/youtube_demo/init.lua
 -- ===========================================================================
 -- FLOATING TERMINAL
 -- ===========================================================================

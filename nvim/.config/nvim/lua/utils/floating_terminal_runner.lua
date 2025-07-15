@@ -1,3 +1,8 @@
+-- Author: Yifattih
+-- ===========================================================================
+-- FLOATING TERMINAL RUNNER
+-- ===========================================================================
+--
 local terminal = require("utils.floating_terminal")
 
 local M = {}
