@@ -26,21 +26,6 @@ die() {
   exit "${code}"
 }
 
-# Install Nerd Hack fonts
-if [ ! -d ~/.fonts ]; then
-  log "Create '.fonts' direcotry"
-  mkdir ~/.fonts
-  log "'.fonts' directory created"
-fi
-
-if [ ! -f ~/.fonts/Hack.zip ]; then
-  log "Downloadng Nerd Hack fonts"
-  wget -O "${HOME}"/.fonts/Hack.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
-  unzip -o "${HOME}"/.fonts/Hack.zip -d ~/.fonts
-  fc-cache -fv
-  log "Fonts setup complete"
-fi
-
 # Docker
 if ! command -v docker >/dev/null 2>&1; then
   # Reference: https://docs.docker.com/engine/install/ubuntu/
