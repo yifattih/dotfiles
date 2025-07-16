@@ -148,32 +148,6 @@ capslock_ctrl_mapping() {
   log "Key mapping complete"
 }
 
-gnome_system_theme_switch_cron() {
-  log "Adding cron jobs to change system theme on selected times"
-  crontab_entry_light='0 7 * * * gnome-theme-switcher light >> ${HOME}/.cron_theme.log 2>&1'
-  crontab_entry_dark='0 19 * * * gnome-theme-switcher dark >> ${HOME}/.cron_theme.log 2>&1'
-
-  local current_crontab
-  current_crontab=$(crontab -l 2>/dev/null || true)
-
-  if ! grep -q "gnome-theme-switcher light" <<<"${current_crontab}"; then
-    (
-      echo "${current_crontab}"
-      echo "${crontab_entry_light}"
-    ) | crontab -
-    log "Added 7AM light mode cron job"
-  fi
-
-  if ! grep -q "gnome-theme-switcher dark" <<<"${current_crontab}"; then
-    (
-      crontab -l 2>/dev/null
-      echo "${crontab_entry_dark}"
-    ) | crontab -
-    log "Added 7PM dark mode cron job"
-  fi
-  log "Jobs added to crontab"
-}
-
 install_tmux_plugin_manager() {
   git clone https://github.com/tmux-plugins/tpm "${HOME}"/.tmux/plugins/tpm
 }
