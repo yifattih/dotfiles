@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 set -Eeuo pipefail
-
 trap cleanup SIGINT SIGTERM ERR EXIT
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd -P)
@@ -18,19 +17,31 @@ Available options:
 -v, --verbose                       Print script debug info
 -f, --file                          To pass 'FILE_PATH' (path of file containing the packages list)
 
-By default FILE_PATH=${HOME}/dotfiles/snap_packages.txt
+By default FILE_PATH=${HOME}/dotfiles/snap-packages.txt
 EOF
   exit
 }
 
+run_cmd() {
+  if [ "${VERBOSE:-0}" -eq 1 ]; then
+    "${@}"
+  else
+    "${@}" >/dev/null 2>&1
+  fi
+}
+
+safe_rm() {
+  rm -rf "${1}" 2>/dev/null || sudo rm -rf "${1}" 2>/dev/null || log "WARN" "Failed to remove ${1}"
+}
+
 cleanup() {
   trap - SIGINT SIGTERM ERR EXIT
-  # script cleanup here
 }
 
 setup_colors() {
   if [[ -t 2 ]] && [[ -z "${NO_COLOR-}" ]] && [[ "${TERM-}" != "dumb" ]]; then
-    NOFORMAT='\033[0m' RED='\033[0;31m' GREEN='\033[0;32m' ORANGE='\033[0;33m' BLUE='\033[0;34m' PURPLE='\033[0;35m' CYAN='\033[0;36m' YELLOW='\033[1;33m'
+    NOFORMAT='\033[0m' RED='\033[0;31m' GREEN='\033[0;32m' ORANGE='\033[0;33m' \
+      BLUE='\033[0;34m' PURPLE='\033[0;35m' CYAN='\033[0;36m' YELLOW='\033[1;33m'
   else
     NOFORMAT='' RED='' GREEN='' ORANGE='' BLUE='' PURPLE='' CYAN='' YELLOW=''
   fi
@@ -62,7 +73,6 @@ die() {
 }
 
 parse_params() {
-  local FILE_FLAG=0
   FILE_PATH="${script_dir}/../snap-packages.txt"
   VERBOSE=0
 
@@ -70,7 +80,6 @@ parse_params() {
     case "${1-}" in
     -h | --help) usage ;;
     -v | --verbose)
-      set -x
       VERBOSE=1
       ;;
     --no-color) NO_COLOR=1 ;;
@@ -79,7 +88,6 @@ parse_params() {
         log "ERROR" "Missing required 'FILE_PATH' argument for -f|--file"
         usage
       fi
-      FILE_FLAG=1
       FILE_PATH="${2}"
       shift
       ;;
@@ -89,7 +97,7 @@ parse_params() {
     shift
   done
 
-  if [ "${FILE_FLAG}" -eq 1 ] && [ -z "${FILE_PATH}" ]; then
+  if [ -z "${FILE_PATH}" ]; then
     die "You must pass the file path"
   fi
 
@@ -103,23 +111,15 @@ parse_params() {
 parse_params "${@}"
 setup_colors
 
-log "Installing packages using the Snap"
+log "Installing packages using the Advanced Package Tool"
 
 while read -r pkg; do
   [[ -z "${pkg}" || "${pkg}" == \#* ]] && continue # Skip blank lines and comments
   log "Package name: ${pkg}"
-  if [ "${VERBOSE:-0}" -eq 1 ]; then
-    if sudo apt-get install "${pkg}" -y; then
-      log "Package '${pkg}' installation complete"
-    else
-      log "ERROR" "Package '${pkg}' installation failed"
-    fi
+  if run_cmd sudo snap install "${pkg}" --classic; then
+    log "Package '${pkg}' installation complete"
   else
-    if sudo apt-get install "${pkg}" -y >/dev/null 2>&1; then
-      log "Package '${pkg}' installation complete"
-    else
-      log "ERROR" "Package '${pkg}' installation failed"
-    fi
+    log "ERROR" "Package '${pkg}' installation failed"
   fi
 done <"${FILE_PATH}"
 
