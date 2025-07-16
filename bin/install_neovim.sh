@@ -33,6 +33,7 @@ safe_rm() {
 
 cleanup() {
   trap - SIGINT SIGTERM ERR EXIT
+  safe_rm "${script_dir}/tmp"
 }
 
 setup_colors() {
@@ -92,11 +93,12 @@ setup_colors
 log "Installing Neovim from pre-built binaries"
 
 # Reference: https://github.com/neovim/neovim/blob/master/INSTALL.md
+run_cmd mkdir "${script_dir}/tmp"
+run_cmd cd "${script_dir}/tmp"
 run_cmd curl -LO "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz"
 safe_rm "${HOME}/bin/nvim"
 run_cmd tar -C "${HOME}/bin/" -xzf "nvim-linux-x86_64.tar.gz"
 run_cmd chown -R "${USER}:${USER}" "${HOME}/bin/nvim-linux-x86_64"
 run_cmd ln -sf "${HOME}/bin/nvim-linux-x86_64/bin/nvim" "${HOME}/bin/nvim"
-safe_rm "nvim-linux-x86_64.tar.gz"
 
 log "SUCCESS" "Neovim installation complete"

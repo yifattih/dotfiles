@@ -33,6 +33,7 @@ safe_rm() {
 
 cleanup() {
   trap - SIGINT SIGTERM ERR EXIT
+  safe_rm "${script_dir}/tmp"
 }
 
 setup_colors() {
@@ -92,12 +93,10 @@ setup_colors
 log "Installing Starship from pre-built binaries"
 
 # Reference: https://starship.rs/
-run_cmd mkdir tmp
-run_cmd cd tmp
+run_cmd mkdir "${script_dir}/tmp"
+run_cmd cd "${script_dir}/tmp"
 run_cmd curl -sS https://starship.rs/install.sh -o install.sh
 run_cmd chmod 755 install.sh
 run_cmd ./install.sh -b "${HOME}"/bin -y
-run_cmd cd ..
-safe_rm tmp
 
 log "SUCCESS" "Starship installation complete"
