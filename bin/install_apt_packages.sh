@@ -18,6 +18,7 @@ Available options:
 -v, --verbose                       Print script debug info
 -f, --file                          To pass 'FILE_PATH' (path of file containing the packages list)
 
+By default FILE_PATH=${HOME}/dotfiles/apt-packages.txt
 EOF
   exit
 }
