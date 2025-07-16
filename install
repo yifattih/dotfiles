@@ -113,28 +113,11 @@ setup_colors
 
 iterate_array() {
   local array="${1}"
+
   IFS=':' read -ra array <<<"${array}"
   for item in "${array[@]}"; do
     echo "${item}"
   done
-}
-
-install_apt_packages() {
-  log "Installing apt packages"
-  while IFS=: read -r pkg bin; do
-    # Skip blank lines and comments
-    [[ -z "${pkg}" || "${pkg}" == \#* ]] && continue
-    # If 'bin' is empty, default to 'pkg'
-    bin="${bin:-${pkg}}"
-    if ! command -v "${bin}" >/dev/null 2>&1; then
-      log "Installing package: ${pkg}"
-      sudo apt-get install "${pkg}" -y
-      log "'${pkg}' installed successfully"
-    else
-      log "Package '${pkg}' is already installed"
-    fi
-  done <"${script_dir}/installer/apt-packages-list.txt"
-  log "SUCCESS" "Apt packages installation complete"
 }
 
 install_snap_packages() {
@@ -209,7 +192,7 @@ if [ ${update_upgrade} -eq 1 ]; then
   log "System upgrade completed"
 fi
 
-if [ ${install_apt_packages} -eq 1 ]; then install_apt_packages; fi
+if [ ${install_apt_packages} -eq 1 ]; then . bin/install_apt_packages.sh; fi
 if [ ${install_snap_packages} -eq 1 ]; then install_snap_packages; fi
 if [ ${install_external_packages} -eq 1 ]; then install_external_packages; fi
 
