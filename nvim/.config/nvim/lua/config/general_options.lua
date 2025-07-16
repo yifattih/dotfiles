@@ -14,7 +14,7 @@ option.cursorline = true     -- Highlight current line
 -- option.wrap = false          -- Don't wrap lines
 option.scrolloff = 10        -- Keep 10 lines above/below cursor
 option.sidescrolloff = 8     -- Keep 8 columns left/right of cursor
-option.textwidth = 79
+option.textwidth = 0
 option.linebreak = true
 
 -- Indentation
@@ -94,13 +94,13 @@ vim.opt.tabline = ''    -- Use default tabline (empty string uses built-in)
 vim.opt.wildmenu = true
 vim.opt.wildmode = "longest:full,full"
 vim.opt.wildignore:append(
-  {
-    "*.o",
-    "*.obj",
-    "*.pyc",
-    "*.class",
-    "*.jar"
-  }
+    {
+        "*.o",
+        "*.obj",
+        "*.pyc",
+        "*.class",
+        "*.jar"
+    }
 )
 
 -- Better diff options
