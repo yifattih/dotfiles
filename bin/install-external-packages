@@ -26,22 +26,6 @@ die() {
   exit "${code}"
 }
 
-# Starship prompt
-if ! command -v starship >/dev/null 2>&1; then
-  # Reference: https://starship.rs/
-  log "Download and install 'starship'"
-  (
-    mkdir tmp &&
-      cd tmp &&
-      curl -sS https://starship.rs/install.sh -o install.sh &&
-      chmod 755 install.sh &&
-      ./install.sh -b "${HOME}"/bin -y &&
-      cd .. &&
-      rm -r tmp
-  )
-  log "'startship' installation complete"
-fi
-
 # Install Nerd Hack fonts
 if [ ! -d ~/.fonts ]; then
   log "Create '.fonts' direcotry"
