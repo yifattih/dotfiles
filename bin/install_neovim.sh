@@ -91,6 +91,7 @@ setup_colors
 
 log "Installing Neovim from pre-built binaries"
 
+# Reference: https://github.com/neovim/neovim/blob/master/INSTALL.md
 run_cmd curl -LO "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz"
 safe_rm "${HOME}/bin/nvim"
 run_cmd tar -C "${HOME}/bin/" -xzf "nvim-linux-x86_64.tar.gz"
