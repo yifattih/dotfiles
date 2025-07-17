@@ -21,9 +21,9 @@ EOF
 
 run_cmd() {
   if [ "${VERBOSE:-0}" -eq 1 ]; then
-    "${@}"
+    "${@}" || sudo "${@}"
   else
-    "${@}" 2>/dev/null
+    "${@}" 2>/dev/null || sudo "${@}" 2>/dev/null
   fi
 }
 
@@ -94,18 +94,18 @@ log "Installing GitHub CLI"
 
 # Reference: https://github.com/cli/cli/blob/trunk/docs/install_linux.md
 
-run_cmd sudo mkdir -p -m 755 /etc/apt/keyrings
+run_cmd mkdir -p -m 755 /etc/apt/keyrings
 run_cmd mkdir "${script_dir}/tmp"
 run_cmd cd "${script_dir}/tmp"
 run_cmd wget -nv -O"keyring.gpg" https://cli.github.com/packages/githubcli-archive-keyring.gpg
-run_cmd sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg <"keyring.gpg"
-run_cmd sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
+run_cmd tee /etc/apt/keyrings/githubcli-archive-keyring.gpg <"keyring.gpg"
+run_cmd chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
 
-run_cmd sudo mkdir -p -m 755 /etc/apt/sources.list.d
-run_cmd echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list
+run_cmd mkdir -p -m 755 /etc/apt/sources.list.d
+run_cmd echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | run_cmd tee /etc/apt/sources.list.d/github-cli.list
 
-run_cmd sudo apt update
+run_cmd apt update
 
-run_cmd sudo apt install gh -y
+run_cmd apt install gh -y
 
 log "SUCCESS" "GitHub CLI installation complete"

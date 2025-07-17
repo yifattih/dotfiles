@@ -21,9 +21,9 @@ EOF
 
 run_cmd() {
   if [ "${VERBOSE:-0}" -eq 1 ]; then
-    "${@}"
+    "${@}" || sudo "${@}"
   else
-    "${@}" 2>/dev/null
+    "${@}" 2>/dev/null || sudo "${@}" 2>/dev/null
   fi
 }
 

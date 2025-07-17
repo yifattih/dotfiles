@@ -24,9 +24,9 @@ EOF
 
 run_cmd() {
   if [ "${VERBOSE:-0}" -eq 1 ]; then
-    "${@}"
+    "${@}" || sudo "${@}"
   else
-    "${@}" >/dev/null 2>&1
+    "${@}" 2>/dev/null || sudo "${@}" 2>/dev/null
   fi
 }
 
@@ -118,7 +118,7 @@ log "Installing packages using the Advanced Package Tool"
 while read -r pkg; do
   [[ -z "${pkg}" || "${pkg}" == \#* ]] && continue # Skip blank lines and comments
   log "Package name: ${pkg}"
-  if run_cmd sudo apt-get install "${pkg}" -y; then
+  if run_cmd apt-get install "${pkg}" -y; then
     log "Package '${pkg}' installation complete"
   else
     log "ERROR" "Package '${pkg}' installation failed"

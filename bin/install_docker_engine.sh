@@ -21,9 +21,9 @@ EOF
 
 run_cmd() {
   if [ "${VERBOSE:-0}" -eq 1 ]; then
-    "${@}"
+    "${@}" || sudo "${@}"
   else
-    "${@}" 2>/dev/null
+    "${@}" 2>/dev/null || sudo "${@}" 2>/dev/null
   fi
 }
 
@@ -93,7 +93,7 @@ log "Installing Docker Engine"
 
 # Reference: https://docs.docker.com/engine/install/ubuntu/
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do
-  run_cmd sudo apt-get remove "${pkg}" -y
+  run_cmd apt-get remove "${pkg}" -y
 done
 
 safe_rm /var/lib/docker
@@ -102,15 +102,15 @@ safe_rm /var/lib/containerd
 safe_rm /etc/apt/sources.list.d/docker.list
 safe_rm /etc/apt/keyrings/docker.asc
 
-run_cmd sudo apt-get install ca-certificates -y
-run_cmd sudo install -m 0755 -d /etc/apt/keyring
-run_cmd sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-run_cmd sudo chmod a+r /etc/apt/keyrings/docker.asc
+run_cmd apt-get install ca-certificates -y
+run_cmd install -m 0755 -d /etc/apt/keyring
+run_cmd curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+run_cmd chmod a+r /etc/apt/keyrings/docker.asc
 
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | run_cmd tee /etc/apt/sources.list.d/docker.list >/dev/null
 
-run_cmd sudo apt-get update
+run_cmd apt-get update
 
-run_cmd sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+run_cmd apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
 log "SUCCESS" "Docker Engine installation complete"
