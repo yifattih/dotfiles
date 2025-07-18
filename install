@@ -98,29 +98,25 @@ setup_colors
 
 set -- # This clears any leftover arguments before running scripts
 
+log "Starting up..."
+
 log "Updating system..."
 run_cmd apt-get update
 log "Update completed"
 
+bash "${script_dir}/bin/install_apt_packages.sh"
+bash "${script_dir}/bin/install_neovim.sh"
+bash "${script_dir}/bin/install_starship.sh"
+bash "${script_dir}/bin/install_tpm.sh"
+bash "${script_dir}/bin/install_zettelkasten.sh"
+
 if [ "${HOST}" -eq 1 ]; then
   log "Starting installation for host environment"
-  bash "${script_dir}/bin/install_apt_packages.sh"
   bash "${script_dir}/bin/install_snap_packages.sh"
   bash "${script_dir}/bin/install_docker_engine.sh"
   bash "${script_dir}/bin/install_github_cli.sh"
   bash "${script_dir}/bin/install_nerd_fonts.sh"
-  bash "${script_dir}/bin/install_neovim.sh"
-  bash "${script_dir}/bin/install_starship.sh"
-  bash "${script_dir}/bin/install_tpm.sh"
-  bash "${script_dir}/bin/install_zettelkasten.sh"
   bash "${script_dir}/bin/capslock_ctrl_map.sh"
-else
-  log "Starting installation for container environment"
-  bash "${script_dir}/bin/install_apt_packages.sh"
-  bash "${script_dir}/bin/install_neovim.sh"
-  bash "${script_dir}/bin/install_starship.sh"
-  bash "${script_dir}/bin/install_tpm.sh"
-  bash "${script_dir}/bin/install_zettelkasten.sh"
 fi
 
 packages_to_stow="shell:git:nvim:tmux"
@@ -128,7 +124,9 @@ packages_to_stow="shell:git:nvim:tmux"
 log "Farming symlinks with stow..."
 IFS=':' read -ra packages <<<"${packages_to_stow}"
 for package in "${packages[@]}"; do
-  run_cmd stow -R --no-folding --verbose=2 --target="${HOME}" "${package}"
+  run_cmd stow -R --adopt --no-folding --verbose=2 --target="${HOME}" "${package}"
+  run_cmd cd "${HOME}/dotfiles"
+  run_cmd git reset --hard
 done
 
 log "SUCCESS" "Dotfiles installation complete"
