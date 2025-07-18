@@ -122,17 +122,18 @@ fi
 packages_to_stow="shell:git:nvim:tmux"
 
 log "Farming symlinks with stow..."
+
+log "Removing possible conflicting files if exist"
+rm -rf "${HOME}/nvim" "${HOME}/tmux"
+rm -rf "${HOME}/.gitconfig" "${HOME}/.gitmessage"
+rm -rf "${HOME}/.config" "${HOME}/.local"
+rm -rf "${HOME}/.bash_aliases" "${HOME}/.bashrc" "${HOME}/.profile"
+rm -rf "${HOME}/.xinitrc" "${HOME}/.xprofile"
+
 IFS=':' read -ra packages <<<"${packages_to_stow}"
 for package in "${packages[@]}"; do
-  if stow -R --adopt --no-folding --verbose=2 --target="${HOME}" "${package}"; then
-    log "Stowed ${package} successfully"
-  else
-    log "WARN" "stow --adopt exited non-zero for ${package}, but may still have succeeded"
-  fi
+  stow -R --no-folding --verbose=2 --target="${HOME}" "${package}"
 done
-
-run_cmd cd "${HOME}/dotfiles"
-run_cmd git reset --hard
 
 log "SUCCESS" "Dotfiles installation complete"
 
