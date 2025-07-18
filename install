@@ -99,7 +99,7 @@ setup_colors
 set -- # This clears any leftover arguments before running scripts
 
 log "Updating system..."
-sudo apt-get update
+run_cmd apt-get update
 log "Update completed"
 
 if [ "${HOST}" -eq 1 ]; then
