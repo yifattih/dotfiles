@@ -11,10 +11,10 @@ local option = vim.opt
 option.number = true         -- Line numbers
 option.relativenumber = true -- Relative line numbers
 option.cursorline = true     -- Highlight current line
--- option.wrap = false          -- Don't wrap lines
+option.wrap = false          -- Don't wrap lines
 option.scrolloff = 10        -- Keep 10 lines above/below cursor
 option.sidescrolloff = 8     -- Keep 8 columns left/right of cursor
-option.textwidth = 0
+option.textwidth = 10000
 option.linebreak = false
 
 -- Indentation
