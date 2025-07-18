@@ -117,7 +117,6 @@ if [ "${HOST}" -eq 1 ]; then
 else
   log "Starting installation for container environment"
   bash "${script_dir}/bin/install_apt_packages.sh"
-  bash "${script_dir}/bin/install_nerd_fonts.sh"
   bash "${script_dir}/bin/install_neovim.sh"
   bash "${script_dir}/bin/install_starship.sh"
   bash "${script_dir}/bin/install_tpm.sh"
