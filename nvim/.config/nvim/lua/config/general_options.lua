@@ -15,7 +15,7 @@ option.cursorline = true     -- Highlight current line
 option.scrolloff = 10        -- Keep 10 lines above/below cursor
 option.sidescrolloff = 8     -- Keep 8 columns left/right of cursor
 option.textwidth = 0
-option.linebreak = true
+option.linebreak = false
 
 -- Indentation
 option.tabstop = 2        -- Tab width
