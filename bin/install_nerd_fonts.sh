@@ -100,6 +100,6 @@ fi
 
 run_cmd wget -O "${HOME}/.fonts/Hack.zip" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip"
 run_cmd unzip -o -q "${HOME}/.fonts/Hack.zip" -d "${HOME}/.fonts"
-run_cmd fc-cache -f
+# run_cmd fc-cache -f
 
 log "SUCCESS" "Nerd fonts installation complete"
