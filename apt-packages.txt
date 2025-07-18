@@ -10,5 +10,5 @@ unzip
 ripgrep
 tmux
 jq
-yq
+# yq
 npm
