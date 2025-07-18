@@ -124,10 +124,11 @@ packages_to_stow="shell:git:nvim:tmux"
 log "Farming symlinks with stow..."
 IFS=':' read -ra packages <<<"${packages_to_stow}"
 for package in "${packages[@]}"; do
-  run_cmd stow -R --adopt --no-folding --verbose=2 --target="${HOME}" "${package}"
-  run_cmd cd "${HOME}/dotfiles"
-  run_cmd git reset --hard
+  stow -R --adopt --no-folding --verbose=2 --target="${HOME}" "${package}"
 done
+
+run_cmd cd "${HOME}/dotfiles"
+run_cmd git reset --hard
 
 log "SUCCESS" "Dotfiles installation complete"
 
