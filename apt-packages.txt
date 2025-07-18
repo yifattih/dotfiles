@@ -1,7 +1,6 @@
-npm
-stow
 curl
 wget
+stow
 git
 zip
 unzip
@@ -12,3 +11,4 @@ tmux
 bat
 eza
 silversearcher-ag
+npm
