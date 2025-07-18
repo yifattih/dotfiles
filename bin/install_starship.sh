@@ -92,6 +92,10 @@ setup_colors
 
 log "Installing Starship from pre-built binaries"
 
+if [ ! -d "${HOME}/bin/" ]; then
+  run_cmd mkdir "${HOME}/bin/"
+fi
+
 # Reference: https://starship.rs/
 run_cmd mkdir "${script_dir}/tmp"
 run_cmd cd "${script_dir}/tmp"

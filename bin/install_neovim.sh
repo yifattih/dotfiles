@@ -92,6 +92,10 @@ setup_colors
 
 log "Installing Neovim from pre-built binaries"
 
+if [ ! -d "${HOME}/bin/" ]; then
+  run_cmd mkdir "${HOME}/bin/"
+fi
+
 # Reference: https://github.com/neovim/neovim/blob/master/INSTALL.md
 run_cmd mkdir "${script_dir}/tmp"
 run_cmd cd "${script_dir}/tmp"
