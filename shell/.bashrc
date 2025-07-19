@@ -119,7 +119,3 @@ fi
 if command -v starship &>/dev/null; then
   eval "$(starship init bash)"
 fi
-
-if [ "${DEVPOD_SSH_CONNECTION}" = true ] && [ -z "${TMUX}" ] && command -v tmux >/dev/null; then
-  tmux attach-session -t default || tmux new-session -s default
-fi
