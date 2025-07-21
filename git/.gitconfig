@@ -41,10 +41,12 @@
 	autoSquash = true
 	autoStash = true
 	updateRefs = true
-[credential]
-	helper = "!gh auth git-credential"
+ [credential]
+    helper = "!gh auth git-credential"
+    helper = "!'/usr/local/bin/devpod' agent git-credentials --port 12049"   helper = "!'/usr/local/bin/devpod' agent git-credentials --port 12049"
 
 # a matter of taste (uncomment if you dare)
+
 [core]
 	editor = nvim 
 	# fsmonitor = true
@@ -54,7 +56,3 @@
 	# conflictstyle = zdiff3 
 [pull]
 	# rebase = true
-
-# my additions
-#[url "ssh://git@github.com/"]
-#    insteadOf = https://github.com/
