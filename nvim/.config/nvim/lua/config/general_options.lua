@@ -15,7 +15,7 @@ option.wrap = false          -- Don't wrap lines
 option.scrolloff = 10        -- Keep 10 lines above/below cursor
 option.sidescrolloff = 8     -- Keep 8 columns left/right of cursor
 option.textwidth = 10000
-option.linebreak = false
+option.linebreak = true
 
 -- Indentation
 option.tabstop = 2        -- Tab width
