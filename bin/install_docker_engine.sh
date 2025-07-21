@@ -113,4 +113,8 @@ run_cmd apt-get update
 
 run_cmd apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
+if [ -f "${HOME}/.bash_aliases" ]; then
+  docker completion bash >>"${HOME}/.bash_aliases"
+fi
+
 log "SUCCESS" "Docker Engine installation complete"
