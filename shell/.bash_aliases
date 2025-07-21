@@ -15,6 +15,8 @@ alias ......='cd ../../../../..'
 
 alias _='sudo'
 
+alias reown='sudo chown -R $(id -n -u):$(id -n -u)'
+
 alias md='mkdir -p'
 
 alias rf='rm'
