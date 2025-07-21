@@ -478,9 +478,3 @@ function grename() {
 ##############################################################################
 ##############################################################################
 ##############################################################################
-# Added by Zettelkasten setup script
-alias zzettel='/home/yifattih/zettelkasten/scripts/new_zettel'
-alias zlit='/home/yifattih/zettelkasten/scripts/new_lit'
-alias zbib='/home/yifattih/zettelkasten/scripts/new_bib'
-alias zindex='/home/yifattih/zettelkasten/scripts/new_index'
-alias zbackup='/home/yifattih/zettelkasten/scripts/backup'
