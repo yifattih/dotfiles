@@ -98,9 +98,7 @@ if ! command -v git >/dev/null 2>&1; then
   run_cmd apt-get install git -y
 fi
 
-if [ -d "${HOME}/zettelkasten" ]; then
-  log "Zettelkasten installed at ${HOME}/zettelkasten"
-else
+if [ ! -d "${HOME}/zettelkasten" ]; then
   run_cmd git clone https://github.com/yifattih/zettelkasten "${HOME}/zettelkasten"
   log "Setting up aliases related to zettelkasten operational scripts"
   . "${HOME}/zettelkasten/setup"
