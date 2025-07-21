@@ -108,17 +108,8 @@ bash "${script_dir}/bin/install_apt_packages.sh"
 bash "${script_dir}/bin/install_neovim.sh"
 bash "${script_dir}/bin/install_starship.sh"
 bash "${script_dir}/bin/install_tpm.sh"
-bash "${script_dir}/bin/install_zettelkasten.sh"
 
-if [ "${HOST}" -eq 1 ]; then
-  log "Starting installation for host environment"
-  bash "${script_dir}/bin/install_snap_packages.sh"
-  bash "${script_dir}/bin/install_docker_engine.sh"
-  bash "${script_dir}/bin/install_github_cli.sh"
-  bash "${script_dir}/bin/install_nerd_fonts.sh"
-  bash "${script_dir}/bin/capslock_ctrl_map.sh"
-fi
-
+# Symlinks farming before installing tools that has auto-completion setups
 packages_to_stow="shell:git:nvim:tmux"
 
 log "Farming symlinks with stow..."
@@ -133,6 +124,20 @@ IFS=':' read -ra packages <<<"${packages_to_stow}"
 for package in "${packages[@]}"; do
   stow -R --no-folding --verbose=2 --target="${HOME}" "${package}"
 done
+
+if [ "${HOST}" -eq 1 ]; then
+  log "Starting installation for host environment"
+  bash "${script_dir}/bin/install_snap_packages.sh"
+  bash "${script_dir}/bin/install_devpod.sh"
+  bash "${script_dir}/bin/install_github_cli.sh"
+  bash "${script_dir}/bin/install_nerd_fonts.sh"
+  bash "${script_dir}/bin/capslock_ctrl_map.sh"
+fi
+
+# Install tools that needs to be installed in both environments and makes
+# extra setup like command completion
+bash "${script_dir}/bin/install_docker_engine.sh"
+bash "${script_dir}/bin/install_zettelkasten.sh"
 
 log "SUCCESS" "Dotfiles installation complete"
 
