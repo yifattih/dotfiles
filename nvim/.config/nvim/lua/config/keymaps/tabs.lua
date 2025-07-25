@@ -76,7 +76,7 @@ vim.keymap.set(
     '<leader>tO',
     tabs.open_file_in_tab,
     {
-        desc = 'Open file in new tab'
+        desc = 'Search file and open in new tab'
     }
 )
 
@@ -86,5 +86,14 @@ vim.keymap.set(
     tabs.duplicate_tab,
     {
         desc = 'Duplicate current tab'
+    }
+)
+
+vim.keymap.set(
+    "n",
+    "<leader>to",
+    "<C-W>gf",
+    {
+        desc = "Open file under cursor in new tab"
     }
 )
